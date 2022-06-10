@@ -57,7 +57,9 @@ public class MQFaultStrategy {
 
     public MessageQueue selectOneMessageQueue(final TopicPublishInfo tpInfo, final String lastBrokerName) {
         if (this.sendLatencyFaultEnable) {
+            // 发送延迟故障开关-启用
             try {
+                // 做一定时间的退避
                 int index = tpInfo.getSendWhichQueue().incrementAndGet();
                 for (int i = 0; i < tpInfo.getMessageQueueList().size(); i++) {
                     int pos = Math.abs(index++) % tpInfo.getMessageQueueList().size();

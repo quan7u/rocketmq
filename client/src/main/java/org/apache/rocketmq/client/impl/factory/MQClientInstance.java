@@ -232,15 +232,15 @@ public class MQClientInstance {
                     if (null == this.clientConfig.getNamesrvAddr()) {
                         this.mQClientAPIImpl.fetchNameServerAddr();
                     }
-                    // Start request-response channel
+                    // Start request-response channel 请求-响应
                     this.mQClientAPIImpl.start();
-                    // Start various schedule tasks
+                    // Start various schedule tasks 若干定时任务
                     this.startScheduledTask();
-                    // Start pull service
+                    // Start pull service 拉取消息服务
                     this.pullMessageService.start();
-                    // Start rebalance service
+                    // Start rebalance service 负载均衡服务
                     this.rebalanceService.start();
-                    // Start push service
+                    // Start push service 重新 start 参数为 false
                     this.defaultMQProducer.getDefaultMQProducerImpl().start(false);
                     log.info("the client factory [{}] start OK", this.clientId);
                     this.serviceState = ServiceState.RUNNING;

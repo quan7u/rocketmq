@@ -314,6 +314,7 @@ public class ProcessQueue {
                         Map.Entry<Long, MessageExt> entry = this.msgTreeMap.pollFirstEntry();
                         if (entry != null) {
                             result.add(entry.getValue());
+                            // 临时存储到该 treeMap
                             consumingMsgOrderlyTreeMap.put(entry.getKey(), entry.getValue());
                         } else {
                             break;

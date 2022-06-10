@@ -44,6 +44,19 @@ public class StorePathConfigHelper {
         return rootDir + File.separator + "lock";
     }
 
+    /**
+     * 获取默认的偏移存储 json 文件路径，key为延时级别，value为消费进度
+     * {
+     *   "offsetTable": {
+     *     3:100,
+     *     5:5
+     *   }
+     * }
+     *
+     *
+     * @param rootDir
+     * @return
+     */
     public static String getDelayOffsetStorePath(final String rootDir) {
         return rootDir + File.separator + "config" + File.separator + "delayOffset.json";
     }

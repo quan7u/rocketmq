@@ -270,6 +270,7 @@ public class DefaultMQProducer extends ClientConfig implements MQProducer {
     }
     
     /**
+     * 启动生产者实例
      * Start this producer instance. </p>
      *
      * <strong> Much internal initializing procedures are carried out to make this instance prepared, thus, it's a must

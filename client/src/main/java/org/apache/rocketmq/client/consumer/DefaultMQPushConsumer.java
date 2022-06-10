@@ -397,6 +397,7 @@ public class DefaultMQPushConsumer extends ClientConfig implements MQPushConsume
                 AsyncTraceDispatcher dispatcher = new AsyncTraceDispatcher(consumerGroup, TraceDispatcher.Type.CONSUME, customizedTraceTopic, rpcHook);
                 dispatcher.setHostConsumer(this.getDefaultMQPushConsumerImpl());
                 traceDispatcher = dispatcher;
+                // 注册钩子
                 this.getDefaultMQPushConsumerImpl().registerConsumeMessageHook(
                     new ConsumeMessageTraceHookImpl(traceDispatcher));
             } catch (Throwable e) {

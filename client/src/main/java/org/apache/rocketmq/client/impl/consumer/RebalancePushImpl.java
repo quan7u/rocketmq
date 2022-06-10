@@ -87,9 +87,11 @@ public class RebalancePushImpl extends RebalanceImpl {
         this.defaultMQPushConsumerImpl.getOffsetStore().removeOffset(mq);
         if (this.defaultMQPushConsumerImpl.isConsumeOrderly()
             && MessageModel.CLUSTERING.equals(this.defaultMQPushConsumerImpl.messageModel())) {
+            // 顺序消费 & 集群模式
             try {
                 if (pq.getConsumeLock().tryLock(1000, TimeUnit.MILLISECONDS)) {
                     try {
+                        // 每隔1s 查看是否可以获取当前消费处理队列的锁，拿到的话返回true
                         return this.unlockDelay(mq, pq);
                     } finally {
                         pq.getConsumeLock().unlock();
@@ -105,6 +107,7 @@ public class RebalancePushImpl extends RebalanceImpl {
                 log.error("removeUnnecessaryMessageQueue Exception", e);
             }
 
+            // 如果等待1s后，仍然拿不到当前消费处理队列的锁则返回false
             return false;
         }
         return true;

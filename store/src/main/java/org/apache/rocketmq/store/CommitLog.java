@@ -390,6 +390,7 @@ public class CommitLog {
                         }
 
                         if (delayLevel > 0) {
+                            // 计算延时消息的投递时间戳，存储在 tagsCode
                             tagsCode = this.defaultMessageStore.getScheduleMessageService().computeDeliverTimestamp(delayLevel,
                                 storeTimestamp);
                         }
@@ -626,6 +627,7 @@ public class CommitLog {
                     msg.setDelayTimeLevel(this.defaultMessageStore.getScheduleMessageService().getMaxDelayLevel());
                 }
 
+                // 替换 topic 为延迟消息 topic SCHEDULE_TOPIC_XXXX
                 topic = TopicValidator.RMQ_SYS_SCHEDULE_TOPIC;
                 int queueId = ScheduleMessageService.delayLevel2QueueId(msg.getDelayTimeLevel());
 

@@ -210,6 +210,11 @@ public class DefaultMQPushConsumerImpl implements MQConsumerInner {
         this.offsetStore = offsetStore;
     }
 
+    /**
+     * 消息拉取
+     *
+     * @param pullRequest
+     */
     public void pullMessage(final PullRequest pullRequest) {
         final ProcessQueue processQueue = pullRequest.getProcessQueue();
         if (processQueue.isDropped()) {
@@ -269,6 +274,7 @@ public class DefaultMQPushConsumerImpl implements MQConsumerInner {
             }
         } else {
             if (processQueue.isLocked()) {
+                // 拉取消息
                 if (!pullRequest.isPreviouslyLocked()) {
                     long offset = -1L;
                     try {
@@ -290,6 +296,7 @@ public class DefaultMQPushConsumerImpl implements MQConsumerInner {
                     pullRequest.setNextOffset(offset);
                 }
             } else {
+                // 处理队列未被锁定，延迟拉取消息
                 this.executePullRequestLater(pullRequest, pullTimeDelayMillsWhenException);
                 log.info("pull message later because not locked in broker, {}", pullRequest);
                 return;
