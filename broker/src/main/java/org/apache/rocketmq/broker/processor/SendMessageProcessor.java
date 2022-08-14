@@ -62,6 +62,13 @@ import org.apache.rocketmq.store.config.MessageStoreConfig;
 import org.apache.rocketmq.store.config.StorePathConfigHelper;
 import org.apache.rocketmq.store.stats.BrokerStatsManager;
 
+/**
+ * 处理消息接收的处理器
+ * 1、消息前置校验
+ * 2、构建 MessageExtBrokerInner
+ * 3、落盘持久化处理
+ * 4、数据统计，返回响应
+ */
 public class SendMessageProcessor extends AbstractSendMessageProcessor implements NettyRequestProcessor {
 
     private List<ConsumeMessageHook> consumeMessageHookList;
@@ -211,6 +218,7 @@ public class SendMessageProcessor extends AbstractSendMessageProcessor implement
             msgExt.setDelayTimeLevel(delayLevel);
         }
 
+        // 构造数据结构
         MessageExtBrokerInner msgInner = new MessageExtBrokerInner();
         msgInner.setTopic(newTopic);
         msgInner.setBody(msgExt.getBody());
@@ -230,6 +238,7 @@ public class SendMessageProcessor extends AbstractSendMessageProcessor implement
         MessageAccessor.setOriginMessageId(msgInner, UtilAll.isBlank(originMsgId) ? msgExt.getMsgId() : originMsgId);
         msgInner.setPropertiesString(MessageDecoder.messageProperties2String(msgExt.getProperties()));
 
+        // 消息落盘，持久化
         CompletableFuture<PutMessageResult> putMessageResult = this.brokerController.getMessageStore().asyncPutMessage(msgInner);
         return putMessageResult.thenApply((r) -> {
             if (r != null) {
@@ -240,6 +249,7 @@ public class SendMessageProcessor extends AbstractSendMessageProcessor implement
                         if (correctTopic != null) {
                             backTopic = correctTopic;
                         }
+                        // 更新数据统计
                         if (TopicValidator.RMQ_SYS_SCHEDULE_TOPIC.equals(msgInner.getTopic())) {
                             this.brokerController.getBrokerStatsManager().incTopicPutNums(msgInner.getTopic());
                             this.brokerController.getBrokerStatsManager().incTopicPutSize(msgInner.getTopic(), r.getAppendMessageResult().getWroteBytes());
@@ -249,6 +259,7 @@ public class SendMessageProcessor extends AbstractSendMessageProcessor implement
                         this.brokerController.getBrokerStatsManager().incSendBackNums(requestHeader.getGroup(), backTopic);
                         response.setCode(ResponseCode.SUCCESS);
                         response.setRemark(null);
+                        // 返回响应
                         return response;
                     default:
                         break;
