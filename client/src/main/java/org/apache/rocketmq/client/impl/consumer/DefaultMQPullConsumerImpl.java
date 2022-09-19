@@ -644,6 +644,7 @@ public class DefaultMQPullConsumerImpl implements MQConsumerInner {
                     this.defaultMQPullConsumer.getConsumerGroup(), isUnitMode());
                 this.pullAPIWrapper.registerFilterMessageHook(filterMessageHookList);
 
+                // 消费位点
                 if (this.defaultMQPullConsumer.getOffsetStore() != null) {
                     this.offsetStore = this.defaultMQPullConsumer.getOffsetStore();
                 } else {

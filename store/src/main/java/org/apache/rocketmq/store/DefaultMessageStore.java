@@ -1991,6 +1991,9 @@ public class DefaultMessageStore implements MessageStore {
         }
     }
 
+    /**
+     * 不断地构建ConsumeQueue/IndexFile数据，并取出hold住的Pull请求进行二次处理
+     */
     class ReputMessageService extends ServiceThread {
 
         private volatile long reputFromOffset = 0;

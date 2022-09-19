@@ -36,9 +36,13 @@ import org.apache.rocketmq.remoting.exception.RemotingException;
 
 /**
  * @deprecated
- * Default pulling consumer.
+ * Default pulling consumer. 默认的拉取式消费者实现
+ *
  * This class will be removed in 2022, and a better implementation {@link DefaultLitePullConsumer} is recommend to use
  * in the scenario of actively pulling messages.
+ * 该类在 2022 废弃，在积极拉取消费的场景推荐使用 DefaultLitePullConsumer
+ *
+ * 但是在 rocketmq-spring-boot-starter 中，该类仍为 listener 实现，有必要学习了解
  */
 @Deprecated
 public class DefaultMQPullConsumer extends ClientConfig implements MQPullConsumer {

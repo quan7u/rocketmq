@@ -29,6 +29,9 @@ import org.apache.rocketmq.logging.InternalLogger;
 import org.apache.rocketmq.logging.InternalLoggerFactory;
 import org.apache.rocketmq.store.ConsumeQueueExt;
 
+/**
+ * 重复尝试执行Pull消息请求来取消息
+ */
 public class PullRequestHoldService extends ServiceThread {
     private static final InternalLogger log = InternalLoggerFactory.getLogger(LoggerName.BROKER_LOGGER_NAME);
     protected static final String TOPIC_QUEUEID_SEPARATOR = "@";
