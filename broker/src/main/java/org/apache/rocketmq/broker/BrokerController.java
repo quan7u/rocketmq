@@ -266,7 +266,7 @@ public class BrokerController {
                 log.error("Failed to initialize", e);
             }
         }
-
+        // 加载存储文件
         result = result && this.messageStore.load();
 
         if (result) {

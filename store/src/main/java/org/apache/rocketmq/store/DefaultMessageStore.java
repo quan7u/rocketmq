@@ -76,7 +76,7 @@ public class DefaultMessageStore implements MessageStore {
     private final MessageStoreConfig messageStoreConfig;
     // CommitLog
     private final CommitLog commitLog;
-
+    // 消费队列表 Map<Topic, Map<queueId, Queue>>
     private final ConcurrentMap<String/* topic */, ConcurrentMap<Integer/* queueId */, ConsumeQueue>> consumeQueueTable;
 
     private final FlushConsumeQueueService flushConsumeQueueService;
@@ -186,9 +186,6 @@ public class DefaultMessageStore implements MessageStore {
         }
     }
 
-    /**
-     * @throws IOException
-     */
     public boolean load() {
         boolean result = true;
 
@@ -1464,7 +1461,7 @@ public class DefaultMessageStore implements MessageStore {
     public TransientStorePool getTransientStorePool() {
         return transientStorePool;
     }
-
+    // 只有初始化时调用，不存在并发问题
     private void putConsumeQueue(final String topic, final int queueId, final ConsumeQueue consumeQueue) {
         ConcurrentMap<Integer/* queueId */, ConsumeQueue> map = this.consumeQueueTable.get(topic);
         if (null == map) {

@@ -60,7 +60,7 @@ public class ConsumeQueue {
 
         this.topic = topic;
         this.queueId = queueId;
-
+        // 拼接的队列文件路径
         String queueDir = this.storePath
             + File.separator + topic
             + File.separator + queueId;
